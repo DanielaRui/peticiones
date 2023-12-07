@@ -45,15 +45,25 @@ const usuariosPut = async (req, res = response) => {
     }
 };
 
+
 const usuariosPost = async (req, res = response) => {
-    const usuario = new Usuarios(req.body);
+    const { nombre, correo, password } = req.body;
 
     try {
-        await usuario.save();
+        // Crear un nuevo usuario usando el modelo Usuario
+        const nuevoUsuario = new Usuario({
+            nombre,
+            correo,
+            password,
+            rol: 'USER_ROL' 
+        });
+
+        await nuevoUsuario.save();
+
         res.json({
             ok: true,
             msg: 'Usuario creado exitosamente',
-            usuario
+            usuario: nuevoUsuario
         });
     } catch (error) {
         console.error(error);
@@ -118,6 +128,8 @@ const usuariosPatch = async (req, res = response) => {
         });
     }
 };
+
+
 
 module.exports = {
     usuariosGet,
